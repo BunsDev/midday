@@ -17,7 +17,6 @@ export class AudioPlayer {
   }
 
   public stopAudio() {
-    console.log("Stopping audio");
     const transport = Tone.getTransport();
     transport.stop();
     transport.cancel();
@@ -35,8 +34,6 @@ export class AudioPlayer {
     if (isPlaying) {
       return this.stopAudio();
     }
-
-    console.log("Playing audio");
 
     await Tone.start();
 
@@ -62,7 +59,6 @@ export class AudioPlayer {
     }
 
     Tone.loaded().then(() => {
-      console.log("Tone loaded");
       new Tone.Part((time, value) => {
         this.synth.triggerAttackRelease(value.note, "1n", time);
       }, chordsNotes).start(0);
@@ -81,8 +77,7 @@ export class AudioPlayer {
     }, duration * 1000);
 
     return new Promise<boolean>((resolve) => {
-      Tone.Transport.on("stop", () => {
-        console.log("Transport stopped");
+      Tone.getTransport().on("stop", () => {
         resolve(false);
       });
     });

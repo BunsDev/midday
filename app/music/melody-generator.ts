@@ -9,17 +9,15 @@ export class MelodyGenerator {
   constructor(private readonly chords: Chord[]) {}
 
   public generate(): { note: string; duration: number }[] {
-    console.log("Generating melody...");
     for (let repeat = 0; repeat < 2; repeat++) {
-      this.chords.forEach((chord, chordIndex) => {
-        this.processChord(chord, chordIndex);
-      });
+      for (const chord of this.chords) {
+        this.processChord(chord);
+      }
     }
     return this.melody;
   }
 
-  private processChord(chord: Chord, chordIndex: number) {
-    console.log(`Processing chord ${chordIndex + 1}/${this.chords.length}... ${chord}`);
+  private processChord(chord: Chord) {
     const phraseBuilder = new PhraseBuilder(chord, this.direction, this.previousNote);
     const phraseNotes = phraseBuilder.buildPhrase();
 
