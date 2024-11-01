@@ -12,22 +12,16 @@ export class MelodyGenerator {
     console.log("Generating melody...");
     for (let repeat = 0; repeat < 2; repeat++) {
       this.chords.forEach((chord, chordIndex) => {
-        this.processChord(chord, chordIndex, repeat);
+        this.processChord(chord, chordIndex);
       });
     }
     return this.melody;
   }
 
-  private processChord(chord: Chord, chordIndex: number, repeat: number) {
+  private processChord(chord: Chord, chordIndex: number) {
     console.log(`Processing chord ${chordIndex + 1}/${this.chords.length}... ${chord}`);
     const phraseBuilder = new PhraseBuilder(chord, this.direction, this.previousNote);
     const phraseNotes = phraseBuilder.buildPhrase();
-
-    if (chordIndex === this.chords.length - 1 && repeat === 1) {
-      console.log("Adding phrase variation...");
-
-      phraseNotes.addPhraseVariation();
-    }
 
     const phrase = phraseNotes.build();
     this.melody.push(...phrase);
