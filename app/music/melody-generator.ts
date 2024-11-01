@@ -3,7 +3,7 @@ import { PhraseBuilder } from "./phrase-builder";
 
 export class MelodyGenerator {
   private readonly melody: { note: string; duration: number }[] = [];
-  private previousNote: string | null = null;
+  private previousNote?: string;
   private direction = Math.random() < 0.5 ? 1 : -1;
 
   constructor(private readonly chords: Chord[]) {}
@@ -23,6 +23,6 @@ export class MelodyGenerator {
 
     const phrase = phraseNotes.build();
     this.melody.push(...phrase);
-    this.previousNote = phrase[phrase.length - 1].note;
+    this.previousNote = phrase[phrase.length - 1]?.note;
   }
 }

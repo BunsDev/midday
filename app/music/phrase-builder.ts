@@ -12,10 +12,10 @@ export class PhraseBuilder {
   private rhythmPattern: number[];
   private currentBeat = 0;
   private rhythmIndex = 0;
-  private previousNote: string | null;
+  private previousNote?: string;
   private noteSelector: NoteSelector;
 
-  constructor(chord: Chord, direction: number, previousNote: string | null) {
+  constructor(chord: Chord, direction: number, previousNote?: string) {
     this.musicTheory = new MusicTheory();
     this.previousNote = previousNote;
 
@@ -26,12 +26,12 @@ export class PhraseBuilder {
 
     this.rhythmPattern = getRandomItem(RHYTHMIC_PATTERNS);
 
-    this.noteSelector = new NoteSelector(this.previousNote, this.direction);
+    this.noteSelector = new NoteSelector(this.direction, this.previousNote);
   }
 
   private addNoteWithApproach(note: string, rhythmValue: number) {
     if (Math.random() < 0.2 && this.currentBeat + rhythmValue < 2) {
-      const approachNote = `${this.scaleNotes[(this.scaleNotes.indexOf(note[0]) - this.direction + 7) % 7]}4`;
+      const approachNote = `${this.scaleNotes[(this.scaleNotes.indexOf(note[0] ?? "A") - this.direction + 7) % 7]}4`;
       const approachDuration = this.musicTheory.quantizeDuration(rhythmValue / 4);
       const mainNoteDuration = this.musicTheory.quantizeDuration(rhythmValue - approachDuration);
       this.phraseNotes.push({ note: approachNote, duration: approachDuration });
@@ -46,7 +46,7 @@ export class PhraseBuilder {
     this.phraseNotes = [];
 
     while (this.currentBeat < 2) {
-      const rhythmValue = this.rhythmPattern[this.rhythmIndex % this.rhythmPattern.length];
+      const rhythmValue = this.rhythmPattern[this.rhythmIndex % this.rhythmPattern.length] || 0.25;
       let note = this.noteSelector.selectNote(this.chordTones, this.scaleNotes, this.phraseNotes, this.currentBeat);
 
       note += "4"; // Add octave number for proper pitch
@@ -65,7 +65,10 @@ export class PhraseBuilder {
   private ensureDurationLimit(phraseNotes: { note: string; duration: number }[]) {
     while (phraseNotes.reduce((sum, n) => sum + n.duration, 0) > 2) {
       const lastNote = phraseNotes[phraseNotes.length - 1];
-      lastNote.duration = Math.max(0.25, lastNote.duration - 0.25);
+
+      if (lastNote) {
+        lastNote.duration = Math.max(0.25, lastNote.duration - 0.25);
+      }
     }
   }
 
@@ -74,20 +77,20 @@ export class PhraseBuilder {
    */
   public addPhraseVariation() {
     const lastNote = this.phraseNotes[this.phraseNotes.length - 1];
-    if (Math.random() < 0.5) {
+    if (Math.random() < 0.5 && lastNote) {
       // Double the duration of the last note
       lastNote.duration = Math.min(lastNote.duration * 2, 2 - this.currentBeat);
-    } else {
+    } else if (lastNote) {
       // Add a flourish to the end of the phrase
       const remainingTime = 2 - this.currentBeat;
       if (remainingTime >= 0.5) {
         const flourish = [
           {
-            note: `${this.scaleNotes[(this.scaleNotes.indexOf(lastNote.note[0]) + 1) % 7]}4`,
+            note: `${this.scaleNotes[(this.scaleNotes.indexOf(lastNote.note[0] ?? "A") + 1) % 7]}4`,
             duration: 0.25,
           },
           {
-            note: `${this.scaleNotes[(this.scaleNotes.indexOf(lastNote.note[0]) + 2) % 7]}4`,
+            note: `${this.scaleNotes[(this.scaleNotes.indexOf(lastNote.note[0] ?? "A") + 2) % 7]}4`,
             duration: 0.25,
           },
         ];

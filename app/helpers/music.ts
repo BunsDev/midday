@@ -3,7 +3,7 @@ import { CHORD_MAP, type Chord } from "../lib/constants";
 import { MelodyGenerator } from "../music/melody-generator";
 
 // Helper function to get random item from array
-export const getRandomItem = <T>(array: T[]): T => array[Math.floor(Math.random() * array.length)];
+export const getRandomItem = <T>(array: T[]): T => array[Math.floor(Math.random() * array.length)] as T;
 
 export const generateCatchyMelody = (chords: Chord[]): { note: string; duration: number }[] => {
   const generator = new MelodyGenerator(chords);

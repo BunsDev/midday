@@ -5,8 +5,8 @@ const SCALE_NOTE_PROBABILITY = 0.3;
 
 export class NoteSelector {
   constructor(
-    private previousNote: string | null,
     private direction: number,
+    private previousNote?: string,
   ) {}
 
   /**
@@ -37,7 +37,7 @@ export class NoteSelector {
         note = getRandomItem(scaleNotes);
       } else {
         // Use passing or neighbor tones
-        note = scaleNotes[(lastNoteIndex + this.direction + 7) % 7];
+        note = scaleNotes[(lastNoteIndex + this.direction + 7) % 7] ?? lastNote;
       }
     }
 
@@ -61,7 +61,7 @@ export class NoteSelector {
       const previousIndex = scaleNotes.indexOf(this.previousNote.replace(/\d+$/, ""));
 
       if (Math.abs(currentIndex - previousIndex) > 2) {
-        adjustedNote = scaleNotes[(previousIndex + this.direction + 7) % 7];
+        adjustedNote = scaleNotes[(previousIndex + this.direction + 7) % 7] ?? note;
       }
 
       if (currentIndex === 6 || currentIndex === 0) {
