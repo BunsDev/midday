@@ -173,7 +173,7 @@ export default function Index() {
       <div className="flex flex-col items-center mt-6">
         <div className="text-center mb-4">
           This project is free to use and{" "}
-          <a className="text-blue-500" target="_blank" href="https://example.com" rel="noreferrer">
+          <a className="text-blue-500" target="_blank" href="https://github.com/meienberger/midday" rel="noreferrer">
             open-source
           </a>
           <br />
