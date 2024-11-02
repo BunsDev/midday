@@ -4,6 +4,7 @@ import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/reac
 import appStylesHref from "./tailwind.css?url";
 
 export const links: LinksFunction = () => [
+  { rel: "icon", href: "https://fav.farm/🎹" },
   { rel: "stylesheet", href: appStylesHref },
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
