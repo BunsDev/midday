@@ -9,7 +9,6 @@ declare module "@remix-run/node" {
 }
 
 export default defineConfig({
-  base: "/midday/",
   plugins: [
     remix({
       future: {
@@ -20,7 +19,6 @@ export default defineConfig({
         v3_lazyRouteDiscovery: true,
       },
       ssr: false,
-      basename: "/midday/",
     }),
     tsconfigPaths(),
   ],
