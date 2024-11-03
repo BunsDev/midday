@@ -1,13 +1,13 @@
+import { Card, CardContent } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import * as Midi from "@tonejs/midi";
 import { useEffect, useRef, useState } from "react";
 import * as Tone from "tone";
-import { Card, CardContent } from "~/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 
+import { Button } from "@/components/ui/button";
+import { chordToNotes, generateCatchyMelody, getRandomItem } from "@/helpers/music";
+import { AudioPlayer, type PlaybackType } from "@/lib/AudioPlayer";
 import type { MetaFunction } from "@remix-run/node";
-import { Button } from "~/components/ui/button";
-import { chordToNotes, generateCatchyMelody, getRandomItem } from "~/helpers/music";
-import { AudioPlayer, type PlaybackType } from "~/lib/AudioPlayer";
 import { type Chord, EMOTION_CHORDS, type Emotion } from "../lib/constants";
 
 export const meta: MetaFunction = () => {

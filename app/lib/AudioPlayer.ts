@@ -1,5 +1,5 @@
+import { chordToNotes, createPiano } from "@/helpers/music";
 import * as Tone from "tone";
-import { chordToNotes, createPiano } from "~/helpers/music";
 import type { Chord } from "./constants";
 
 export type PlaybackType = "both" | "chords" | "melody";
@@ -58,7 +58,7 @@ export class AudioPlayer {
       }
     }
 
-    Tone.loaded().then(() => {
+    return Tone.loaded().then(() => {
       new Tone.Part((time, value) => {
         this.synth.triggerAttackRelease(value.note, "1n", time);
       }, chordsNotes).start(0);
@@ -67,18 +67,17 @@ export class AudioPlayer {
         this.synth.triggerAttackRelease(value.note, value.duration, time);
       }, melodyNotes).start(0);
 
-      Tone.getTransport().start();
-    });
+      const transport = Tone.getTransport();
 
-    // Set the Transport to stop after playing
-    const duration = 16; // 16 seconds for 8 bars
-    this.timeoutRef = setTimeout(() => {
-      this.stopAudio();
-    }, duration * 1000);
+      transport.start();
 
-    return new Promise<boolean>((resolve) => {
-      Tone.getTransport().on("stop", () => {
-        resolve(false);
+      return new Promise<boolean>((resolve) => {
+        // Set the Transport to stop after playing
+        const duration = 16; // 16 seconds for 8 bars
+        this.timeoutRef = setTimeout(() => {
+          this.stopAudio();
+          resolve(false);
+        }, duration * 1000);
       });
     });
   }
